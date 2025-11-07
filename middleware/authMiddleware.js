@@ -9,8 +9,10 @@ export const authMiddleware = (requiredRole) => {
       if (!auth) return res.status(401).json({ message: "No token" });
       const token = auth.split(" ")[1];
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-      // attach user object minimal
+
+
       if (payload.role === "brand") {
+        console.log(payload);
         req.user = { id: payload.id, role: "brand" };
       } else if (payload.role === "influencer") {
         req.user = { id: payload.id, role: "influencer" };
@@ -18,9 +20,11 @@ export const authMiddleware = (requiredRole) => {
         req.user = { id: payload.id, role: "ops" };
       }
 
-      // simple role check
       if (requiredRole && requiredRole !== req.user.role) {
+        console.log("yes")
+console.log("yess",req.user.role)
         return res.status(403).json({ message: "Forbidden" });
+
       }
       next();
     } catch (err) {

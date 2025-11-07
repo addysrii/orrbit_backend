@@ -32,3 +32,49 @@ export const loginBrand = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+export const updateBrandProfile = async (req, res) => {
+  try {
+    const brandId = req.user?.id; // from authMiddleware
+    if (!brandId) return res.status(401).json({ message: "Unauthorized" });
+
+    const {
+      name,
+      email,
+      website,
+      industry,
+      description,
+      budgetRange,
+      marketingGoals,
+      targetAudience,
+      preferredInfluencerNiches,
+      preferredPlatform,
+    } = req.body;
+
+    const brand = await Brand.findById(brandId);
+    if (!brand) return res.status(404).json({ message: "Brand not found" });
+
+    // Update fields dynamically
+    brand.name = name || brand.name;
+    brand.email = email || brand.email;
+    brand.website = website || brand.website;
+    brand.industry = industry || brand.industry;
+    brand.description = description || brand.description;
+    brand.budgetRange = budgetRange || brand.budgetRange;
+    brand.marketingGoals = marketingGoals || brand.marketingGoals;
+    brand.targetAudience = targetAudience || brand.targetAudience;
+    brand.preferredInfluencerNiches = preferredInfluencerNiches || brand.preferredInfluencerNiches;
+    brand.preferredPlatform = preferredPlatform || brand.preferredPlatform;
+
+    await brand.save();
+
+    res.status(200).json({
+      message: "Brand profile updated successfully",
+      brand,
+    });
+  } catch (error) {
+    console.error("Profile Update Error:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};

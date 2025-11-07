@@ -6,6 +6,7 @@ export const createCampaign = async (req, res) => {
     res.status(201).json(campaign);
   } catch (error) {
     res.status(400).json({ message: error.message });
+    console.log(error.message);
   }
 };
 

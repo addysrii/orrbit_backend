@@ -5,8 +5,9 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import session from "express-session";
 import passport from "passport";
-import "./config/passport.js"; // Load LinkedIn strategy early
-
+import "./config/passport.js"; 
+import brandLinkedInPassport from "./config/brandLinkedInPassport.js";
+import brandLinkedInRoutes from "./routes/brandLinkedInRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import influencerRoutes from "./routes/influencerRoutes.js";
 import campaignRoutes from "./routes/campaignRoutes.js";
@@ -30,6 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/api", authRoutes);
+app.use("/api/brandLinkedIn",  brandLinkedInRoutes);
 app.use("/api/brands", brandRoutes);
 app.use("/api/influencers", influencerRoutes);
 app.use("/api/campaigns", campaignRoutes);
